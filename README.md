@@ -10,31 +10,22 @@
 * To follow next code snippet you should read and understand the **Layout** section, http://developer.android.com/reference/android/view/View.html#Layout
 
 ```
-  //todo optimise
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
     val widthMode = MeasureSpec.getMode(widthMeasureSpec);
     val widthSize = MeasureSpec.getSize(widthMeasureSpec);
     val heightMode = MeasureSpec.getMode(heightMeasureSpec);
     val heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-    var size: Int
-
-    if (widthMode == MeasureSpec.UNSPECIFIED && heightMode == MeasureSpec.UNSPECIFIED) {
-      size = minSize
-    } else if (layoutParams.width == MATCH_PARENT && layoutParams.height == MATCH_PARENT) {
-      size = getExact(widthSize - paddingStart - paddingEnd,
-                      heightSize - paddingTop - paddingBottom)
-    } else if (widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY) {
-      size = widthSize
-    } else if (heightMode == MeasureSpec.EXACTLY && widthMode != MeasureSpec.EXACTLY) {
-      size = heightSize
-    } else if (heightMode == MeasureSpec.EXACTLY && widthMode == MeasureSpec.EXACTLY) {
-      size = getExact(widthMode,heightMode)
-    } else {
-      size = minSize
+    var size: Int = 0
+    
+    when {
+      (layoutParams.width == MATCH_PARENT && layoutParams.height == MATCH_PARENT) -> size = getExact(widthSize, heightSize)
+      (widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY) -> size = getExact(widthSize, 0)
+      (heightMode == MeasureSpec.EXACTLY && widthMode != MeasureSpec.EXACTLY) -> size = getExact(0, heightSize)
+      (heightMode == MeasureSpec.EXACTLY && widthMode == MeasureSpec.EXACTLY) -> size = getExact(widthMode, heightMode)
+      else -> size = minSize
     }
-
+    
     setMeasuredDimension(size, size);
   }
 ```
