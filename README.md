@@ -93,3 +93,6 @@ setMeasuredDimension(w, h);
   
 
 #### Padding support
+
+<img src="ondraw-padding-support.png"/>
+
