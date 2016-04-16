@@ -2,6 +2,7 @@ package be.vergauwen.simon.customloadview
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_layout.*
 
 class Activity : AppCompatActivity(){
 
@@ -9,6 +10,11 @@ class Activity : AppCompatActivity(){
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_layout)
 
-//    load_view.startAnimation()
+    load_view.setMax(10)
+
+    increase_progress.setOnClickListener { load_view.incrementProgressBy(1) }
+
+    reset.setOnClickListener { load_view.resetProgress() }
+
   }
 }

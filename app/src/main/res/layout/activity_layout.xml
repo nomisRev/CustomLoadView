@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <be.vergauwen.simon.customloadview.LoadView
         android:id="@+id/load_view"
@@ -11,4 +12,18 @@
         android:layout_height="wrap_content"
         android:padding="10dp"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/increase_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/reset"
+        android:text="increase progress"/>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="reset"/>
+
+</RelativeLayout>
