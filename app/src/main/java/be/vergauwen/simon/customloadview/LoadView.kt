@@ -57,7 +57,6 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
     setMeasuredDimension(w, h);
   }
 
-  private var steps = (360f / max) * progress
 
   override fun onDraw(canvas: Canvas) {
     canvas.drawColor(Color.RED)
