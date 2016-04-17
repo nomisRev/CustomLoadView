@@ -1,4 +1,5 @@
 # Custom Load View
+<img src="demo.gif" width="240" height="426" />
 
 * Making a custom view can be quite troublesome if you've never done it before and depending on the use case.
 
