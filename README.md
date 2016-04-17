@@ -121,3 +121,35 @@ override fun onDraw(canvas: Canvas) {
 
 * This is something I prefer to do at the end. I work with properties in code like you can see above. When the custom view is finished I have a better idea of what properties I find essential to be configurable. I prefer this approach over going back and forth to add custom attributes.
 
+* First we'll define our xml attirbutes in a `attrs.xml` file which should be placed in the res directory.
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadView">
+        <attr format="integer" name="width_progress"/>
+        <attr format="integer" name="max"/>
+        <attr format="color" name="inner_color"/>
+        <attr format="color" name="outer_color"/>
+    </declare-styleable>
+</resources>
+```
+
+* Now all that's left is retrieving the attributes in code
+```
+private fun getAttrs(attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
+    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.LoadView, defStyleAttr,
+                                                          defStyleRes);
+    
+  try {
+    innerColor = attributes.getColor(R.styleable.LoadView_inner_color,Color.GREEN)
+    outerColor  = attributes.getColor(R.styleable.LoadView_outer_color,Color.CYAN)
+    max = attributes.getInteger(R.styleable.LoadView_max,0)
+    widthOuterArc = attributes.getFloat(R.styleable.LoadView_width_progress,40f)
+  } finally {
+    attributes.recycle();
+  }
+}
+```
+
+* Since the attributes are retrieved and assigned to the correct properties in the constructor (or init in Kotlin) there is no need to `invalidate()` the view like we would do in a `setInnerColor()` because we are sure that `onDraw()` we be called after we retrieved the attributes.
