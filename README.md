@@ -41,6 +41,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 * Adding padding support for padding is not required, that's why it resides in a seperate topic.
 * I recommened adding padding support from the start, to make your view more flexible and reuseable and uniform with your code and the Android system. 
 * Padding behaviour:
+  * `WRAP_CONTENT` when we set `WRAP_CONTENT` we want the view to be as small as possible with guarantee that the view will fit. When we add padding to a view set to `WRAP_CONTENT` it's the equivalent of  the view being as small as possible plus the extra padding area around it. So adding padding to `SIZE = MIN SIZE + PADDING`
   * Padding applied to `wrap_content` increases the size of the view, in order to wrap around the content inside the view
   * When `exactly` specified or set to `match_parent` the size of the view may not be increased, padding now reduces the "useable" space inside the canvas.
 
