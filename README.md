@@ -8,6 +8,10 @@
 
 * Before starting to draw, we should make sure that the `Canvas` we'll be drawing on has the size we want. Think of the `Canvas` as a piece of paper you draw on. If the paper is too small, your drawing won't fit. If your paper is to big, it will take an unnecessary amount of space in a collage or on the wall.
 * To follow next code snippet you should read and understand the **Layout** section, http://developer.android.com/reference/android/view/View.html#Layout
+  * If `WRAP_CONTENT` is set as size we want the view to be as small as possible with guarantee that the view will fit. `SIZE = MIN SIZE`
+  * When a size is specified as `EXACTLY` or as `MATCH_PARENT`, we want the view to have the exact size or the size of the parent. `SIZE = EXACT` or `SIZE = SIZE PARENT`
+  
+* When we take into account that for our use case we want the view to be square we get the following method.
 
 ```
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -41,9 +45,8 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 * Adding padding support for padding is not required, that's why it resides in a seperate topic.
 * I recommened adding padding support from the start, to make your view more flexible and reuseable and uniform with your code and the Android system. 
 * Padding behaviour:
-  * `WRAP_CONTENT` when we set `WRAP_CONTENT` we want the view to be as small as possible with guarantee that the view will fit. When we add padding to a view set to `WRAP_CONTENT` it's the equivalent of  the view being as small as possible plus the extra padding area around it. So adding padding to `SIZE = MIN SIZE + PADDING`
-  * Padding applied to `wrap_content` increases the size of the view, in order to wrap around the content inside the view
-  * When `exactly` specified or set to `match_parent` the size of the view may not be increased, padding now reduces the "useable" space inside the canvas.
+  * When we add padding to a view set to `WRAP_CONTENT` it's the equivalent of  the view being as small as possible plus the extra padding area around it. So adding padding to `SIZE = MIN SIZE + PADDING`
+  * When a size is specified `EXACTLY` or we set to the size to `MATCH_PARENT` the size of the view may **not** be increased, padding now reduces the "useable" space inside the canvas. So we can conclude that his has no effect in our `onMeasure()`method. `SIZE = EXACT SIZE` or `SIZE = SIZE PARENT`
 
 * Knowing this, it's quite easy to add padding functionality for us in our `onMeasure()` method. In the case that `minSize` would be determined as the size, we increase minSize with the padding.
 ```
