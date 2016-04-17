@@ -150,4 +150,4 @@ private fun getAttrs(attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
 }
 ```
 
-* Since the attributes are retrieved and assigned to the correct properties in the constructor (or init in Kotlin) there is no need to `invalidate()` the view like we would do in a `setInnerColor()` because we are sure that `onDraw()` we be called after we retrieved the attributes.
+* Since the attributes are retrieved and assigned to the correct properties in the constructor (or init in Kotlin) there is no need to `invalidate()` the view like we would do in a `setInnerColor()` because we are sure that `onDraw()` will be called after we retrieved the attributes.
