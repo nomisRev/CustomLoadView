@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadView">
+        <attr format="float" name="width_progress"/>
+        <attr format="integer" name="max"/>
+        <attr format="color" name="inner_color"/>
+        <attr format="color" name="outer_color"/>
+    </declare-styleable>
+</resources>

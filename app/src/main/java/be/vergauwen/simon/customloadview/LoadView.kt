@@ -14,18 +14,41 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
 
   private val paint = Paint()
   private val minSize = LayoutUtil.convertDpToPixel(48f).toInt()
-  private var sizeOuterCircle = 40f
+  private var widthOuterArc = 0f
   private var sizeInnerCircle = 0f
   private var innerColor = Color.GREEN
   private var outerColor = Color.CYAN
   private var max = 0
   private var progress = 0
+  private var topArc = 0f
+  private var leftArc = 0f
+  private var rightArc = 0f
+  private var bottomArc = 0f
 
   init {
     paint.style = Paint.Style.FILL
     paint.isAntiAlias = true
     paint.color = Color.parseColor("#00FF00")
+    getAttrs(attrs, defStyleAttr, defStyleRes)
   }
+
+
+  private fun getAttrs(attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
+    val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.LoadView, defStyleAttr,
+                                                          defStyleRes);
+
+    try {
+      innerColor = attributes.getColor(R.styleable.LoadView_inner_color,Color.GREEN)
+      outerColor  = attributes.getColor(R.styleable.LoadView_outer_color,Color.CYAN)
+      max = attributes.getInteger(R.styleable.LoadView_max,0)
+      widthOuterArc = attributes.getFloat(R.styleable.LoadView_width_progress,40f)
+    } finally {
+      attributes.recycle();
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // onMeasure Impl
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
@@ -33,8 +56,8 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
     val widthSize = MeasureSpec.getSize(widthMeasureSpec);
     val heightMode = MeasureSpec.getMode(heightMeasureSpec);
     val heightSize = MeasureSpec.getSize(heightMeasureSpec);
-    var w: Int = 0
-    var h: Int = 0
+    var w: Int
+    var h: Int
 
     when {
       (layoutParams.width == MATCH_PARENT && layoutParams.height == MATCH_PARENT) -> {
@@ -57,22 +80,6 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
     setMeasuredDimension(w, h);
   }
 
-
-  override fun onDraw(canvas: Canvas) {
-    canvas.drawColor(Color.RED)
-
-    sizeInnerCircle = (width - paddingStart - paddingEnd - sizeOuterCircle).toFloat()
-
-    paint.color = outerColor
-
-    canvas.drawArc((0 + paddingStart ).toFloat(), (0 + paddingTop ).toFloat(),
-                   (width - paddingEnd).toFloat(), (height - paddingBottom).toFloat(),
-                   270f, (360f / max) * progress, true, paint)
-
-    paint.color = innerColor;
-    canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, sizeInnerCircle / 2, paint)
-  }
-
   private fun getExact(w: Int, h: Int): Int {
     var size: Int
     if (w < h && minSize < h) {
@@ -85,24 +92,61 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
     return size
   }
 
-  private fun getAttrs(attrs: AttributeSet) {
+ ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // onDraw Impl
 
+  override fun onDraw(canvas: Canvas) {
+    drawProgress(canvas)
+    drawInnerCircle(canvas)
   }
 
-  fun setMax(max : Int){
-    if(0 <= max){
+  private fun drawProgress(canvas : Canvas){
+    paint.color = outerColor
+    topArc = (0 + paddingStart ).toFloat()
+    rightArc = (0 + paddingTop ).toFloat()
+    bottomArc = (width - paddingEnd).toFloat()
+    leftArc = (height - paddingBottom).toFloat()
+    canvas.drawArc(topArc, rightArc, bottomArc, leftArc, 270f, (360f / max) * progress, true, paint)
+  }
+
+  private fun drawInnerCircle(canvas: Canvas){
+    paint.color = innerColor
+    sizeInnerCircle = (width - paddingStart - paddingEnd - widthOuterArc).toFloat()
+    canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, sizeInnerCircle / 2, paint)
+  }
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Programmatically equivalent of xml attributes
+
+  fun setMax(max: Int) {
+    if (0 <= max) {
       this.max = max
       invalidate()
     }
   }
 
-  fun setProgress(progress: Int){
+  fun setProgress(progress: Int) {
     this.progress = progress
     invalidate()
   }
 
-  fun incrementProgressBy(incrementBy : Int){
-    if(progress + incrementBy < max){
+  fun setProgressColor(color: Int) {
+    outerColor = color
+    invalidate()
+  }
+
+  fun setFABColor(color: Int) {
+    innerColor = color
+    invalidate()
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Load View Impl
+
+  fun incrementProgressBy(incrementBy: Int) {
+    if (progress + incrementBy < max) {
       progress += incrementBy
     } else {
       progress = max
@@ -110,18 +154,8 @@ class LoadView @JvmOverloads constructor(context: Context, attrs: AttributeSet, 
     invalidate()
   }
 
-  fun resetProgress(){
+  fun resetProgress() {
     progress = 0
-    invalidate()
-  }
-
-  fun setProgressColor(color : Int){
-    outerColor = color
-    invalidate()
-  }
-
-  fun setFABColor(color : Int){
-    innerColor = color
     invalidate()
   }
 }
