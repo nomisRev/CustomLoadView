@@ -69,21 +69,14 @@ setMeasuredDimension(w, h);
 * It is **important** that you keep your onDraw method as fast as possible. Since you have no control of how much it's called. Let's say it's slow, and another view calls `requestLayout()` your view's `onDraw()` might be called quite frequently. For that reason I choose to declare my variables outside of the `onDraw()` method.
 
 ```
-  private var sizeOuterCircle = 40f
-  private var sizeInnerCircle = 0f
-  private var rect = RectF()
-  private var innerColor = Color.GREEN
-  private var outerColor = Color.CYAN
-
-  override fun onDraw(canvas: Canvas) {
-    sizeInnerCircle = (width - sizeOuterCircle).toFloat()
-
-    paint.color = outerColor
-    canvas.drawArc(0.toFloat(), 0.toFloat(),width.toFloat(), height.toFloat(), 270f, 180f, true, paint)
-
-    paint.color = innerColor;
-    canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, sizeInnerCircle / 2, paint)
-  }
+override fun onDraw(canvas: Canvas) {
+  paint.color = outerColor
+  canvas.drawArc(0f, 0f,width.toFloat(), height.toFloat(), 270f, (360f / max) * progress, true, paint)
+  
+  paint.color = innerColor
+  sizeInnerCircle = (width - sizeOuterCircle).toFloat()
+  canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, sizeInnerCircle / 2, paint)
+}
 ```
 
 * Let's break it down: We have an inner and an outer part.
@@ -94,5 +87,33 @@ setMeasuredDimension(w, h);
 
 #### Padding support
 
-<img src="ondraw-padding-support.png"/>
+* In the `onDraw()` is where the real padding support is implemented butt is more straight forward to implement than the `onMeasure()`. There is only one thing you need to taking into account when implementing support for padding in `onDraw()`, let's examine the following example.
+
+<img src="ondraw-padding-support.png" width="443" height="159"/>
+
+* Let's say the square underneath is our `Canvas` with a padding of x dp than the red border has a width of x dp. This padding or red border is the part we cannot draw within.
+* The code below shows the effect of adding padding support in `onDraw()`
+
+
+```
+override fun onDraw(canvas: Canvas) {
+  paint.color = outerColor
+  topArc = (0 + paddingStart ).toFloat()
+  rightArc = (0 + paddingTop ).toFloat()
+  bottomArc = (width - paddingEnd).toFloat()
+  leftArc = (height - paddingBottom).toFloat()
+  canvas.drawArc(topArc, rightArc, bottomArc, leftArc, 270f, (360f / max) * progress, true, paint)
+
+  paint.color = innerColor
+  sizeInnerCircle = (width - paddingStart - paddingEnd - widthOuterArc).toFloat()
+  canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, sizeInnerCircle / 2, paint)
+}
+```
+
+* So since our `drawArc` works with `rectF` system to determine the size of the arc. We can easily determine that the `rectF` is the green area in the above example.  So we can easily adjust the first piece of code to take the padding into account.
+* To draw the inner circle it is fairly easy too, we calculated the size based on the width of the arc and the width of the `Canvas`. The `Canvas` now becomes the `Canvas` minus the padding, so again the green area.
+
+## Adding custom attributes
+
+* This is something I prefer to do at the end. I work with properties in code like you can see above. When the custom view is finished I have a better idea of what properties I find essential to be configurable. I prefer this approach over going back and forth to add custom attributes.
 
