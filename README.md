@@ -1,5 +1,3 @@
-# **Still in development, there will be a lot of changes in code and readme**
-
 # Custom Load View
 
 * Making a custom view can be quite troublesome if you've never done it before and depending on the use case.
