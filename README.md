@@ -40,9 +40,9 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### Padding support
 
-* Adding padding support for padding is not required, that's why it resides in a seperate topic.
-* I recommened adding padding support from the start, to make your view more flexible and reuseable and uniform with your code and the Android system. 
-* Padding behaviour:
+* Adding padding support for padding is not required, that's why it resides in a separate topic.
+* I recommend adding padding support from the start, to make your view more flexible and reusable and uniform with your code and the Android system. 
+* Padding behavior:
   * When we add padding to a view set to `WRAP_CONTENT` it's the equivalent of  the view being as small as possible plus the extra padding area around it. So adding padding to `SIZE = MIN SIZE + PADDING`
   * When a size is specified `EXACTLY` or we set to the size to `MATCH_PARENT` the size of the view may **not** be increased, padding now reduces the "useable" space inside the canvas. So we can conclude that his has no effect in our `onMeasure()`method. `SIZE = EXACT SIZE` or `SIZE = SIZE PARENT`
 
@@ -119,7 +119,7 @@ override fun onDraw(canvas: Canvas) {
 
 * This is something I prefer to do at the end. I work with properties in code like you can see above. When the custom view is finished I have a better idea of what properties I find essential to be configurable. I prefer this approach over going back and forth to add custom attributes.
 
-* First we'll define our xml attirbutes in a `attrs.xml` file which should be placed in the res directory.
+* First we'll define our xml attributes in a `attrs.xml` file which should be placed in the res directory.
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
