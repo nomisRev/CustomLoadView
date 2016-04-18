@@ -10,7 +10,7 @@ class Activity : AppCompatActivity(){
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_layout)
 
-    load_view.setMax(10)
+    load_view.setMax(100)
 
     increase_progress.setOnClickListener { load_view.incrementProgressBy(1) }
 
